@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/colorPrimary"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.branden.findkingtutstreasuregame.CharacterCreation">
+
+    <EditText
+        android:id="@+id/etCharacterName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="84dp"
+        android:layout_marginRight="84dp"
+        android:layout_marginTop="57dp"
+        android:ems="10"
+        android:hint="Character Name"
+        android:inputType="textPersonName"
+        android:textAlignment="center"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="84dp"
+        android:layout_marginTop="33dp"
+        android:text="Select Character"
+        android:textSize="24sp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etCharacterName"
+        android:layout_marginEnd="103dp" />
+
+    <Button
+        android:id="@+id/btnStartGame"
+        android:layout_width="163dp"
+        android:layout_height="49dp"
+        android:layout_marginBottom="31dp"
+        android:layout_marginRight="110dp"
+        android:text="Start Game"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginEnd="110dp" />
+
+    <ScrollView
+        android:id="@+id/vCharacterScroll"
+        android:layout_width="140dp"
+        android:layout_height="279dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="19dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        tools:layout_editor_absoluteY="179dp">
+
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TableRow
+                android:id="@+id/tableRow1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:id="@+id/rl1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageButton
+                        android:id="@+id/man1"
+                        android:layout_width="142dp"
+                        android:layout_height="132dp"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/man1"
+                        tools:layout_editor_absoluteX="29dp"
+                        tools:layout_editor_absoluteY="312dp" />
+
+                    <ImageView
+                        android:id="@+id/frameMan1"
+                        android:layout_width="123dp"
+                        android:layout_height="137dp"
+                        app:srcCompat="@drawable/picture_frame"
+                        tools:layout_editor_absoluteX="127dp"
+                        tools:layout_editor_absoluteY="176dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true" />
+
+                </RelativeLayout>
+
+            </TableRow>
+
+
+            <ImageButton
+                android:id="@+id/women1"
+                android:layout_width="142dp"
+                android:layout_height="132dp"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/woman1"
+                tools:layout_editor_absoluteX="29dp"
+                tools:layout_editor_absoluteY="312dp" />
+
+
+            <ImageButton
+                android:id="@+id/man2"
+                android:layout_width="188dp"
+                android:layout_height="150dp"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/man2"
+                tools:layout_editor_absoluteX="29dp"
+                tools:layout_editor_absoluteY="312dp" />
+
+            <ImageButton
+                android:id="@+id/woman2"
+                android:layout_width="188dp"
+                android:layout_height="150dp"
+                android:elevation="0dp"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/woman2"
+                tools:layout_editor_absoluteX="29dp"
+                tools:layout_editor_absoluteY="312dp" />
+
+            <ImageButton
+                android:id="@+id/man3"
+                android:layout_width="188dp"
+                android:layout_height="150dp"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/man3"
+                tools:layout_editor_absoluteX="29dp"
+                tools:layout_editor_absoluteY="312dp" />
+
+            <ImageView
+                android:id="@+id/frameWoman1"
+                android:layout_width="123dp"
+                android:layout_height="137dp"
+                app:srcCompat="@drawable/picture_frame"
+                tools:layout_editor_absoluteX="127dp"
+                tools:layout_editor_absoluteY="176dp" />
+
+            <ImageView
+                android:id="@+id/frameMan2"
+                android:layout_width="123dp"
+                android:layout_height="137dp"
+                app:srcCompat="@drawable/picture_frame"
+                tools:layout_editor_absoluteX="127dp"
+                tools:layout_editor_absoluteY="176dp" />
+
+            <ImageView
+                android:id="@+id/frameWoman2"
+                android:layout_width="123dp"
+                android:layout_height="137dp"
+                app:srcCompat="@drawable/picture_frame"
+                tools:layout_editor_absoluteX="127dp"
+                tools:layout_editor_absoluteY="176dp" />
+
+            <ImageView
+                android:id="@+id/frameMan3"
+                android:layout_width="123dp"
+                android:layout_height="137dp"
+                app:srcCompat="@drawable/picture_frame"
+                tools:layout_editor_absoluteX="127dp"
+                tools:layout_editor_absoluteY="176dp" />
+
+        </TableLayout>
+    </ScrollView>
+
+
+</android.support.constraint.ConstraintLayout>
