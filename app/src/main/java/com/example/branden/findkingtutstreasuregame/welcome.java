@@ -56,6 +56,8 @@ public class welcome extends AppCompatActivity {
             int enemysKilled = load.getInt("enemys killed", 0);
             int bubble = load.getInt("bubble", 0);
             int backgroundCounter = load.getInt("background counter",0);
+            int repel = load.getInt("repel", 0);
+            int goldMine = load.getInt("goldmine", 0);
 
             //send data to and open main Game
             Intent open = new Intent(welcome.this, MainGame.class);
@@ -80,12 +82,15 @@ public class welcome extends AppCompatActivity {
             open.putExtra("enemy number", enemyNum);
             open.putExtra("bubble", bubble);
             open.putExtra("background counter", backgroundCounter);
+            open.putExtra("repel", repel);
+            open.putExtra("goldmine", goldMine);
 
             startActivity(open);
         }
     }
 
-    public void toaster(String message, int length){
+    public void toaster(String message, int length)
+    {
 
         final Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
         toast.show();

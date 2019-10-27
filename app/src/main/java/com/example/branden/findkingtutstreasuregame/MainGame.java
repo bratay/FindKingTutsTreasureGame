@@ -1,9 +1,6 @@
 package com.example.branden.findkingtutstreasuregame;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.RequiresApi;
@@ -39,7 +36,7 @@ public class MainGame extends AppCompatActivity {
     int mapDim=0;//map dimention, keeps track of with dimention in the map array to change
     int[] mapDimValue={0,0,0,0};//keeps track of the valuse that go in to each dimenition in the map array
     int itemChoice = 0;
-    boolean[] inventory= new boolean[6];
+    boolean[] inventory= new boolean[7];
 
     ConstraintLayout background=null;
     ImageButton item = null;
@@ -62,6 +59,8 @@ public class MainGame extends AppCompatActivity {
     int enemysKilled=0;
 
     int bubble = 0;//this is for the bubble item, it's how many hit defelcts he has left
+    int repel =0;//this is how many repeld steps the user has left
+    int goldMine =0;//counts how many more items will drop
 
     static final int requestItem = 2;//must be greater than 0
 
@@ -109,6 +108,7 @@ public class MainGame extends AppCompatActivity {
             playerHunger = loaded.getIntExtra("hunger", 0);
             playerAttack = loaded.getIntExtra("attack power", 0);
             enemysKilled = loaded.getIntExtra("enemys killed", 0);
+            playerHP = loaded.getIntExtra("player HP", 0);
             charNum = loaded.getIntExtra("character number", 0);
             actionCounter = loaded.getIntExtra("action counter", 0);
             playerdefense = loaded.getIntExtra("player defence", 0);
@@ -119,6 +119,8 @@ public class MainGame extends AppCompatActivity {
             enemyNum = loaded.getIntExtra("enemy number", 0);
             bubble = loaded.getIntExtra("bubble", 0);
             backgroundCounter = loaded.getIntExtra("background counter", 0);
+            repel = loaded.getIntExtra("repel", 0);
+            goldMine = loaded.getIntExtra("goldmine", 0);
 
             //change background
             if (backgroundCounter == 9) {
@@ -202,7 +204,6 @@ public class MainGame extends AppCompatActivity {
             }
         }
     }
-
 
     public void DirectionChange(View V) {
         background = (ConstraintLayout) findViewById(R.id.back);
@@ -309,7 +310,10 @@ public class MainGame extends AppCompatActivity {
         int attakced= (int) (Math.random()*100)+1;
 
         //20 percent chance for a monster to attack
-        if(attakced<= 20) {
+        if(repel>0){
+            repel -=1;
+        }
+        else if(attakced<= 20) {
             if (playerAttack <= 2) {
                 enemyNum = (int) ((Math.random()*3)+1);
                 enemyAttack=1;
@@ -331,15 +335,20 @@ public class MainGame extends AppCompatActivity {
         //decides if an item will drop
         int dropNumber = (int) ((Math.random()*100)+1);//number is random between 0 and 100 if the number is below 20 player gets an item
 
+        if(goldMine >0){//checks to see if user has any free drops
+            dropNumber =20;
+            goldMine -= 1;
+        }
+
         if(dropNumber <= 40)
         {
             centerText.setText("You've found an item");
 
             item.setVisibility(View.VISIBLE);
 
-            itemChoice = (int) ((Math.random()*(6-1))+1);
+            itemChoice = (int) ((Math.random()*(7))+1);
 
-            //these are the 6 items that can drop, a number is chosen randomly
+            //these are the 7 items that can drop, a number is chosen randomly
             switch (itemChoice){
                 case 1:
                     item.setImageResource(R.drawable.bread);
@@ -357,7 +366,10 @@ public class MainGame extends AppCompatActivity {
                     item.setImageResource(R.drawable.bubble);
                     break;
                 case 6:
-                    item.setImageResource(R.drawable.teleport);
+                    item.setImageResource(R.drawable.repel);
+                    break;
+                case 7:
+                    item.setImageResource(R.drawable.goldmine);
                     break;
             }
         }
@@ -390,6 +402,9 @@ public class MainGame extends AppCompatActivity {
                 break;
             case 6:
                 inventory[5] = true;
+                break;
+            case 7:
+                inventory[6] = true;
                 break;
         }
 
@@ -489,8 +504,6 @@ public class MainGame extends AppCompatActivity {
 
         if(playerHP <= 0){
             gameOver(V);
-
-           // Toast.makeText(this,"You where killed", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -501,21 +514,16 @@ public class MainGame extends AppCompatActivity {
         //if defence is at 0 user gets hit else defence goes down by 1
         if(playerdefense ==0) {
             playerHP -=enemyAttack;
-
             hpText.setText("HP: "+ playerHP);
-
             toaster("Your shield has broke", 500);
         }
         else {
             playerdefense -= 1;
-
             toaster("block", 500);
         }
-
         //checks to see is user is alive
         if(playerHP <= 0){
             gameOver(V);
-
             Toast.makeText(this,"You where killed", Toast.LENGTH_LONG).show();
         }
     }
@@ -582,6 +590,8 @@ public class MainGame extends AppCompatActivity {
         bag.putExtra("enemy number", enemyNum);
         bag.putExtra("bubble", bubble);
         bag.putExtra("background counter", backgroundCounter);
+        bag.putExtra("repel", repel);
+        bag.putExtra("goldmine", goldMine);
 
         startActivityForResult(bag, requestItem);
     }
@@ -607,19 +617,21 @@ public class MainGame extends AppCompatActivity {
                     }else if(usedItem[4] == true){
                         bubbleAction();
                     }else if(usedItem[5] == true){
-                        teleportAction();
+                        repelAction();
+                    }else if(usedItem[6] == true){
+                        goldMineAction();
                     }else{
                         toaster("No item was used", 1000);
                     }
 
                     //resets the item array so items are not used twice
-                    for(int x=0; x <6; x+=1){
+                    for(int x=0; x <7; x+=1){
                         if(usedItem[x] == true){
                             inventory[x] = false;
                         }
                     }
 
-                }else{
+                }else{//if the data from inventory activity does not come through
                     toaster("data is null", 1000);
                 }
             }
@@ -629,7 +641,7 @@ public class MainGame extends AppCompatActivity {
     public void breadItem(){
         hungerText = (TextView) findViewById(R.id.tvHunger);
 
-        playerHunger -=2;
+        playerHunger -=3;
 
         if(playerHunger < 0){
             playerHunger = 0;
@@ -673,55 +685,17 @@ public class MainGame extends AppCompatActivity {
         toaster("A bubble surounds you", 1200);
     }
 
-    public void teleportAction(){
-        //set where the player is to 3
-        map[mapDimValue[0]] [mapDimValue[1]] [mapDimValue[2]] [mapDimValue[3]]= 3;
+    public void repelAction(){
+        //set repel to 5
+        repel =5;
 
-        //map[mapDimValue[0]] [mapDimValue[1]] [mapDimValue[2]] [mapDimValue[3]] [mapDimValue[4]]= 1;
+        toaster("You spray your self with repelent ", 1000);
+    }
 
-        //set back the direct that will be changed
-        mapDim -=1;
+    public void goldMineAction(){
+        goldMine =3;
 
-        backgroundCounter -=1;
-
-        if(backgroundCounter <1){
-            backgroundCounter=8;
-        }
-
-        switch (backgroundCounter){
-            case 1:
-                background.setBackgroundResource(R.drawable.tunnel);
-                break;
-            case 2:
-                background.setBackgroundResource(R.drawable.tunnel2);
-                break;
-            case 3:
-                background.setBackgroundResource(R.drawable.tunnel3);
-                break;
-            case 4:
-                background.setBackgroundResource(R.drawable.tunnel4);
-                break;
-            case 5:
-                background.setBackgroundResource(R.drawable.tunnel5);
-                break;
-            case 6:
-                background.setBackgroundResource(R.drawable.tunnel6);
-                break;
-            case 7:
-                background.setBackgroundResource(R.drawable.tunnel7);
-                break;
-            case 8:
-                background.setBackgroundResource(R.drawable.tunnel8);
-                break;
-        }
-
-        if(backgroundCounter==8){
-            backgroundCounter=0;
-        }
-
-        reset();
-
-        toaster("You teleported back one space", 1000);
+        toaster("Items fall from the ceiling", 1000);
     }
 
     public void win(View V){

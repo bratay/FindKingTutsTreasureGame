@@ -20,7 +20,8 @@ public class Inventory extends AppCompatActivity {
     ImageButton sword =null;
     ImageButton fire =null;
     ImageButton bubble =null;
-    ImageButton teleport =null;
+    ImageButton repel =null;
+    ImageButton goldMine = null;
     ImageButton stats =null;
     ImageButton save =null;
 
@@ -33,7 +34,7 @@ public class Inventory extends AppCompatActivity {
 
     public static final String tools= "an item was used";
 
-    boolean[] itemUsed = new boolean[6];
+    boolean[] itemUsed = new boolean[7];
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -46,15 +47,16 @@ public class Inventory extends AppCompatActivity {
         sword =(ImageButton) findViewById(R.id.ibSword);
         fire =(ImageButton) findViewById(R.id.ibFire);
         bubble =(ImageButton) findViewById(R.id.ibBubble);
-        teleport =(ImageButton) findViewById(R.id.ibTeleport);
+        repel =(ImageButton) findViewById(R.id.ibRepel);
+        goldMine =(ImageButton) findViewById(R.id.ibGoldMine);
         stats =(ImageButton) findViewById(R.id.ibStats);
         save =(ImageButton) findViewById(R.id.ibSave);
 
-        ImageButton[] items = {bread, potion, sword, fire, bubble, teleport};
+        ImageButton[] items = {bread, potion, sword, fire, bubble, repel, goldMine};
         Intent bag = getIntent();
         final boolean[] boolItems = bag.getBooleanArrayExtra(MainGame.booInventory);
 
-        for(int x =0; x <6; x +=1) {
+        for(int x =0; x <7; x +=1) {
             itemUsed[x] = false;
 
             //sets teh items image to question mark if the user did not pick it up
@@ -98,7 +100,7 @@ public class Inventory extends AppCompatActivity {
 
                 Intent charInfo = getIntent();
 
-                //cheks to see if the player is alive before saving
+                //checks to see if the player is alive before saving
                 if(charInfo.getIntExtra("player HP", 0) <= 0){
                     toaster("There is not a game to save", 1500);
                 }
@@ -122,6 +124,8 @@ public class Inventory extends AppCompatActivity {
                     myEditor.putInt("enemy number", charInfo.getIntExtra("enemy number",0));
                     myEditor.putInt("bubble", charInfo.getIntExtra("bubble",0));
                     myEditor.putInt("background counter", charInfo.getIntExtra("background counter", 0));
+                    myEditor.putInt("repel", charInfo.getIntExtra("repel", 0));
+                    myEditor.putInt("goldmine", charInfo.getIntExtra("goldmine", 0));
                     myEditor.apply();
 
                     toaster("Your game was successfully saved", 1000);
@@ -144,7 +148,7 @@ public class Inventory extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public void breadAction(View v)//lowers hunger by 2
+    public void breadAction(View v)//lowers hunger by 3
     {
         bread= (ImageButton) findViewById(R.id.ibBread);
 
@@ -161,11 +165,9 @@ public class Inventory extends AppCompatActivity {
     public void potionAction(View v)//raises health by 2
     {
         potion =(ImageButton) findViewById(R.id.ibPotion);
-
         if(potion.getDrawable() != getDrawable(R.drawable.question_mark))
         {
             potion.setImageDrawable(getDrawable(R.drawable.question_mark));
-
             itemUsed[1]= true;
         }
     }
@@ -174,11 +176,9 @@ public class Inventory extends AppCompatActivity {
     public void swordAction(View v)//raises attack by 1
     {
         sword =(ImageButton) findViewById(R.id.ibSword);
-
         if(sword.getDrawable() != getDrawable(R.drawable.question_mark))
         {
             sword.setImageDrawable(getDrawable(R.drawable.question_mark));
-
             itemUsed[2]= true;
         }
     }
@@ -187,11 +187,9 @@ public class Inventory extends AppCompatActivity {
     public void fireAction(View v)//kills one enemy
     {
         fire =(ImageButton) findViewById(R.id.ibFire);
-
         if(fire.getDrawable() != getDrawable(R.drawable.question_mark))
         {
             fire.setImageDrawable(getDrawable(R.drawable.question_mark));
-
             itemUsed[3]= true;
         }
     }
@@ -200,27 +198,37 @@ public class Inventory extends AppCompatActivity {
     public void bubbleAction(View v)//blocks 3 attacks
     {
         bubble =(ImageButton) findViewById(R.id.ibBubble);
-
         if(bubble.getDrawable() != getDrawable(R.drawable.question_mark))
         {
             bubble.setImageDrawable(getDrawable(R.drawable.question_mark));
-
             itemUsed[4]= true;
         }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public void teleportAction(View v)
+    public void repelAction(View v)//scares enemys away for the next 15 steps
     {
-        teleport =(ImageButton) findViewById(R.id.ibTeleport);
+        repel =(ImageButton) findViewById(R.id.ibRepel);
 
-        if(teleport.getDrawable() != getDrawable(R.drawable.question_mark))
+        if(repel.getDrawable() != getDrawable(R.drawable.question_mark))
         {
-            teleport.setImageDrawable(getDrawable(R.drawable.question_mark));
+            repel.setImageDrawable(getDrawable(R.drawable.question_mark));
 
             itemUsed[5]= true;
         }
 
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void goldMineAction (View V)//The next 3 steps will drop items
+    {
+        goldMine =(ImageButton) findViewById(R.id.ibGoldMine);
+
+        if(goldMine.getDrawable() != getDrawable(R.drawable.question_mark)) {
+            goldMine.setImageResource(R.drawable.question_mark);
+
+            itemUsed[6] = true;
+        }
     }
 
     public void openStats() {
